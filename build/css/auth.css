@@ -1,0 +1,33 @@
+.btn:hover {
+	border: 1px solid #ccc
+}
+
+body {
+	background-color: #f5eee2 !important;
+}
+
+.auth-logo {
+	width: 8rem;
+	height: 8rem;
+	border-radius: 15px;
+}
+
+.marquee marquee{
+	font-size: 20px;
+}
+
+input.form-control {
+	margin: 0px 0px 0px !important;
+}
+.form-group {
+	margin: 0 0 20px !important;
+}
+
+label.error {
+	color : red;
+	float: left;
+}
+
+input.error {
+	border : 1px solid red !important;
+}
