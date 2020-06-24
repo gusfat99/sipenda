@@ -14,10 +14,20 @@ class Lomba extends CI_Controller {
 
 	public function input_lomba() {
 		$type = $this->input->get('input', true);
+		$jenisLomba = $this->input->get('lct', true);
+		
 		if ($type) {
 			$data["title"] = "Tambah Mata Lomba";
 			$insertId = $this->input->get('insertId');
 			$data["mata_lomba"] = $this->lomba->get_mata_lomba($insertId);
+			$data["kriteria"] = null;
+			if($jenisLomba) {
+				$data["kriteria"] = [
+					"Soal Wajib",
+					"Soal Rebutan",
+					"Jawaban Salah" 
+				];	
+			}
 			$this->template->render_page("lomba/add_kriteria_v",$data);
 		} else {
 			$data["title"] = "Tambah Mata Lomba";
@@ -30,8 +40,7 @@ class Lomba extends CI_Controller {
 		$post = [
 			$this->input->post('namaLomba', true),
 			$this->input->post('golongan',true),
-			$this->input->post('satuan', true),
-			$this->input->pos('kejuaraan_fav', true)
+			$this->input->post('satuan', true)
 		];
 		$insertId = $this->lomba->add_lomba($post);
 		$session = array(
@@ -53,6 +62,21 @@ class Lomba extends CI_Controller {
 				"is_minus" => 0
 			];
 		}
+		 if($this->input->get('isLct')) {
+			array_push($data, [
+				"id_r_mata_lomba" => $id_r_mata_lomba,
+				"kriteria" => "Jawaban Benar",
+				"nilai_max" => 100,
+				"is_minus" => 0
+			], [
+				"id_r_mata_lomba" => $id_r_mata_lomba,
+				"kriteria" => "Waktu",
+				"nilai_max" => 0,
+				"is_minus" => 0
+			]);
+		 }
+		 
+		 
 		for ($i=0; $i < $minus; $i++) { 
 			$data2[$i] = [
 				"id_r_mata_lomba" => $id_r_mata_lomba,

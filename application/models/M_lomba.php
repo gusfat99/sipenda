@@ -23,7 +23,7 @@ class M_lomba extends CI_Model {
 			"mata_lomba" => $post[0],
 			"tingkatan" => $post[1],
 			"satuan_terpisah" => $post[2],
-			"kejuaraan_favorite" => $post[3]
+			"kejuaraan_favorite" => 0,
 		];
 
 		$result = $this->db->insert($this->_tabel_master, $data);

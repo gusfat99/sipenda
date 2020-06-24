@@ -27,6 +27,19 @@
 
 							</div>
 						</div>
+						<div class="row">
+							<div class="col-md-6 col-sm-6  form-group has-feedback">
+
+								<select type="text" class="form-control has-feedback-left" id="jenis_lomba" required name="jenis_lomba">
+									<option value="">Pilih Jenis Lomba..</option>
+									<option value="Umum">Umum</option>
+									<option value="LCT" >LCT</option>
+									<option value="Debat" >Debat</option>
+								</select>
+								<span class="fa fa-users form-control-feedback left"></span>
+
+							</div>
+						</div>
 						<div class="form-group row">
 							<label class="col-form-label col-md-3 col-sm-3 ">Satuan Terpisah</label>
 							<div class="col-md-9 col-sm-9 ">
@@ -37,19 +50,6 @@
 								<div class="custom-control custom-radio custom-control-inline">
 									<input type="radio" id="satuan_t" value="0" name="satuan" class="custom-control-input">
 									<label class="custom-control-label" for="satuan_t">Tidak</label>
-								</div>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-form-label col-md-3 col-sm-3 ">Kejuaraan Favorite</label>
-							<div class="col-md-9 col-sm-9 ">
-								<div class="custom-control custom-radio custom-control-inline">
-									<input type="radio" value="1" id="kejuaraan_fav_y" name="kejuaraan_fav"  class="custom-control-input">
-									<label class="custom-control-label" for="kejuaraan_fav_y">Ya</label>
-								</div>
-								<div class="custom-control custom-radio custom-control-inline">
-									<input type="radio" id="kejuaraan_fav_t" checked value="0" name="kejuaraan_fav" class="custom-control-input">
-									<label class="custom-control-label" for="kejuaraan_fav_t">Tidak</label>
 								</div>
 							</div>
 						</div>
@@ -71,11 +71,35 @@
 	$(document).ready(function(argument) {
 		$("#step-1").show();
 
+		let jenisLomba;
+
+		$("select[name=jenis_lomba]").change(function(){
+			jenisLomba = $(this).val();
+		});
 		const onSubmitFormLomba = (a, b) => {
 			const form1 = $("form#form-lomba").serialize();
-			console.log(form1);
+		
 			if(confirm("Data sudah sesuai ?")) {
+				console.log(jenisLomba);
 				
+
+				if(jenisLomba === "LCT") {
+					$.ajax({
+						url : `<?= base_url("lomba/add_lomba"); ?>`,
+						type : "POST",
+						dataType : "json",
+						data : form1,
+						async : true,
+						success : (rest) => {
+							
+							const tingkatan = $("select[name='golongan']").val();
+							document.location.href=`<?= base_url('lomba/input_lomba/') ?>?input=${tingkatan}&&count=2&&minus=1&&insertId=${rest.insertId}&&lct=true`;
+							
+						},
+						error : (err) => console.log(err)
+					});
+					return;
+				}
 
 				const countKriteria =  prompt("Masukan jumlah kriteria penilaian");
 				if (countKriteria <= 0 || !parseInt(countKriteria)) {

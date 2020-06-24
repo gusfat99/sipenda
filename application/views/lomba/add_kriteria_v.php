@@ -17,7 +17,7 @@ $minKriteria = $this->input->get('minus', true);
 							<?php for($i = 0; $i<$countKriteria; $i++):?>
 								<div class="form-group row has-feedback kriteria-penilaian">
 									<div class="col-md-6 col-sm-6 ">
-										<input type="text" class="form-control has-feedback-left" name="kriteria<?= $i ?>" placeholder="Input Kriteria ke-<?= $i+1; ?>" required="required">
+										<input type="text" class="form-control has-feedback-left" value="<?= $kriteria ? $kriteria[$i] : "" ;?>" name="kriteria<?= $i ?>" placeholder="Input Kriteria ke-<?= $i+1; ?>" required="required">
 										<span class="fa fa-at form-control-feedback left"></span>
 									</div>
 									<div class="col-md-3 col-sm-3">
@@ -36,11 +36,12 @@ $minKriteria = $this->input->get('minus', true);
 					</div>
 					<div class="x_content">
 						<input type="hidden" name="id_mata_lomba" value="<?= $mata_lomba->id_mata_lomba ?>">
+						<input type="hidden" name="identifyIsLct" value="<?= $kriteria ? true : false ?>">
 						<div class="form-label-left input_mask">
 							<?php for($i = 0; $i<$minKriteria; $i++):?>
 								<div class="form-group row has-feedback kriteria-penilaian">
 									<div class="col-md-6 col-sm-6 ">
-										<input type="text" class="form-control has-feedback-left" name="kriteriamin<?= $i ?>" placeholder="Kriteria Penguran Point ke-<?= $i+1; ?>" required="required">
+										<input type="text" class="form-control has-feedback-left" value="<?= $kriteria ? $kriteria[2] : ""; ?>" name="kriteriamin<?= $i ?>" placeholder="Kriteria Penguran Point ke-<?= $i+1; ?>" required="required">
 										<span class="glyphicon glyphicon-minus form-control-feedback left"></span>
 									</div>
 									<div class="col-md-3 col-sm-3">
@@ -72,6 +73,8 @@ $minKriteria = $this->input->get('minus', true);
 		const tingkatan = '<?= $tingkatan ?>';
 		const minKriteria = '<?= $minKriteria ?>';
 		let golongan = '';
+		let isLct = $("input[name=identifyIsLct]").val();
+
 
 		if (tingkatan == "SMA") {
 			golongan = "penegak";
@@ -82,7 +85,7 @@ $minKriteria = $this->input->get('minus', true);
 		}
 		b.preventDefault();
 		$.ajax({
-			url : `<?= base_url("lomba/add_kriteria_penilaian"); ?>/${countKriteria}/${insertId}/${minKriteria}`,
+			url : `<?= base_url("lomba/add_kriteria_penilaian"); ?>/${countKriteria}/${insertId}/${minKriteria}?isLct=${isLct}`,
 			type : "POST",
 			dataType : "json",
 			data : data,
