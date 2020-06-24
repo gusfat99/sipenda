@@ -36,7 +36,7 @@
 									<option value="LCT" >LCT</option>
 									<option value="Debat" >Debat</option>
 								</select>
-								<span class="fa fa-users form-control-feedback left"></span>
+								<span class="fa fa-gears form-control-feedback left"></span>
 
 							</div>
 						</div>
@@ -56,7 +56,7 @@
 						<div class="ln_solid"></div>
 						<div class="form-group row">
 							<div class="col-md-8 col-sm-8">
-								<button type="submit" class="btn simpan btn-success">Simpan</button>
+								<button type="submit" class="btn simpan btn-success">Selanjutnya</button>
 								<a href="" class="btn btn-danger">Batal</a>
 							</div>
 						</div>
