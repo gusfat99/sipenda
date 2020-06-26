@@ -17,43 +17,49 @@
 						</div>
 						<div class="x_title">
 							<h2>Kriteria Penilaian Kejuaraan Favorite</h2>
+							
 							<div class="float-right">
-								<a href="#" class="btn btn-sm btn-outline-info"><i class="fa fa-plus"></i></a>
+								<a href="#" id="btn-add-form" class="btn btn-sm btn-outline-info"><i class="fa fa-plus"></i></a>
 							</div>
+							
 							<div class="clearfix"></div>
 						</div>
-						<div class="row">
-							<div class="col-md-6 col-sm-6  form-group has-feedback">
-								<input data-rule-required="true" type="text" class="form-control has-feedback-left" id="kriteria_fav" name="kriteria_fav1" required placeholder="Kriteria Penilaian ke-1">
-								<span class="fa fa-at form-control-feedback left"></span>
+						<div class="clone-form">
+							<div class="row current-form-kriteria">
+								<div class="col-md-6 col-sm-6  form-group has-feedback">
+									<input data-rule-required="true" type="text" class="form-control has-feedback-left" name="kriteria_fav-0[]" required placeholder="Kriteria Penilaian">
+									<span class="fa fa-at form-control-feedback left"></span>
+								</div>	
+								<div class="col-md-4 col-sm-4  form-group has-feedback">
+									<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaimax_fav-0[]" required placeholder="Nilai Max.">
+									<span class="fa fa-plus form-control-feedback left"></span>
+								</div>	
+								
 							</div>	
-							<div class="col-md-4 col-sm-4  form-group has-feedback">
-								<input data-rule-required="true" type="text" class="form-control has-feedback-left" id="nilaiMax_fav" name="nilaimax_fav1" required placeholder="Nilai Max.">
-								<span class="fa fa-plus form-control-feedback left"></span>
-							</div>	
-							<div class="col-md-2 col-sm-2">
-								<a href="" class="btn btn-sm btn-outline-danger"><i class="fa fa-minus"></i></a>
-							</div>
 						</div>
+						
 						<div class="x_title">
 							<h2>Kriteria Penguranan Nilai Kejuaraan Favorite</h2>
 							<div class="float-right">
-								<a href="#" class="btn btn-sm btn-outline-info"><i class="fa fa-plus"></i></a>
+								<a href="#" id="btn-add-kriteria_min" class="btn btn-sm btn-outline-info"><i class="fa fa-plus"></i></a>
 							</div>
 							<div class="clearfix"></div>
 						</div>
-						<div class="row">
-							<div class="col-md-6 col-sm-6  form-group has-feedback">
-								<input data-rule-required="true" type="text" class="form-control has-feedback-left" id="kriteriaMinus_fav1" name="kriteriaMinus_fav" required placeholder="Kriteria Pengurangan nilai ke-1">
-								<span class="fa fa-at form-control-feedback left"></span>
+						<div class="contain-form-kriteria_min">
+							<div class="row">
+								<div class="col-md-6 col-sm-6  form-group has-feedback">
+									<input data-rule-required="true" type="text" class="form-control has-feedback-left" id="kriteriaMinus_fav1" name="kriteriaMinus_fav" required placeholder="Kriteria Pengurangan nilai ke-1">
+									<span class="fa fa-at form-control-feedback left"></span>
+								</div>
+								<div class="col-md-4 col-sm-4  form-group has-feedback">
+									<input data-rule-required="true" type="text" class="form-control has-feedback-left" id="nilaiMinus_fav1" name="nilaiMinus_fav1" required placeholder="Nilai Min.">
+									<span class="fa fa-minus form-control-feedback left"></span>
+								</div>	
+								
+									<a href=""  class="btn btn-remove-kriteri-min btn-sm btn-outline-danger"><i class="fa fa-minus"></i></a>
+								
 							</div>
-							<div class="col-md-4 col-sm-4  form-group has-feedback">
-								<input data-rule-required="true" type="text" class="form-control has-feedback-left" id="nilaiMinus_fav1" name="nilaiMinus_fav1" required placeholder="Nilai Min.">
-								<span class="fa fa-minus form-control-feedback left"></span>
-							</div>	
-							<div class="col-md-2 col-sm-2">
-								<a href="" class="btn btn-sm btn-outline-danger"><i class="fa fa-minus"></i></a>
-							</div>
+						
 						</div>
 						
 						<div class="ln_solid"></div>
@@ -71,7 +77,75 @@
 </div>
 
 <script type="text/javascript">
+	const formKriteria = $(".current-form-kriteria");
+	let counterFormKriteria = 1;
+
+	$("#btn-add-form").click(function(e){
+		e.preventDefault();
+
+		const cloneForm = `
+			<div class="row current-form-kriteria-${counterFormKriteria}">
+				<div class="col-md-6 col-sm-6  form-group has-feedback">
+					<input data-rule-required="true" type="text" class="form-control has-feedback-left" name="kriteria_fav-0[]" required placeholder="Kriteria Penilaian ke-${counterFormKriteria+1}">
+					<span class="fa fa-at form-control-feedback left"></span>
+				</div>	
+				<div class="col-md-4 col-sm-4  form-group has-feedback">
+					<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaimax_fav-0[]" required placeholder="Nilai Max.">
+					<span class="fa fa-plus form-control-feedback left"></span>
+				</div>	
+				
+				<a href="#" data-current="${counterFormKriteria}" class="btn text-center btn-remove-kriteria btn-sm btn-outline-danger"><i class="fa fa-minus"></i>
+				</a>
+				
+			</div>	
+		`;
+		$(".clone-form").append(cloneForm);
+
+		// const filter = $(".current-form-kriteria-"+counterFormKriteria).filter(`input[name=kriteria_fav-${counterFormKriteria - 1}]`);
+		// console.log(filter);		
+		
+		counterFormKriteria++;
+	});
+
+	$(".clone-form").on('click', '.btn-remove-kriteria', function(e) {
+		e.preventDefault();
+		$(this).parent().remove();
+	})
+
+	let counterFormKriteriaMin = 1;
+	
+	$("#btn-add-kriteria_min").click(function(e) {
+		e.preventDefault();
+
+		const formKriteriaMin = `
+			<div class="row">
+				<div class="col-md-6 col-sm-6  form-group has-feedback">
+					<input data-rule-required="true" type="text" class="form-control has-feedback-left" name="kriteriaMinus_fav[]" required placeholder="Kriteria Pengurangan nilai ke-${counterFormKriteriaMin+1}">
+					<span class="fa fa-at form-control-feedback left"></span>
+				</div>
+				<div class="col-md-4 col-sm-4  form-group has-feedback">
+					<input data-rule-required="true" type="text" class="form-control has-feedback-left" id="nilaiMinus_fav1" name="nilaiMinus_fav[]" required placeholder="Nilai Min.">
+					<span class="fa fa-minus form-control-feedback left"></span>
+				</div>	
+				
+				<a href=""  class="btn btn-remove-kriteri-min btn-sm btn-outline-danger"><i class="fa fa-minus"></i>
+				</a>
+			</div>
+		`;
+
+		$(".contain-form-kriteria_min").append(formKriteriaMin);
+		counterFormKriteriaMin++;
+
+	});
+
+	$(".contain-form-kriteria_min").on('click', '.btn-remove-kriteri-min', function(e) {
+		e.preventDefault();
+		$(this).parent().remove();
+	});
+	
 	$(document).ready(function(argument) {
+
+		
 		$("#step-1").show();
 
 		let jenisLomba;
