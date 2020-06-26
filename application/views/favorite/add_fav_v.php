@@ -32,7 +32,7 @@
 									<span class="fa fa-at form-control-feedback left"></span>
 								</div>	
 								<div class="col-md-4 col-sm-4  form-group has-feedback">
-									<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaimax_fav0" required placeholder="Nilai Max.">
+									<input data-rule-required="true" type="number" class="form-control has-feedback-left"  name="nilaimax_fav0" required placeholder="Nilai Max.">
 									<span class="fa fa-plus form-control-feedback left"></span>
 								</div>	
 								
@@ -50,11 +50,11 @@
 							<input type="hidden" name="currentIndexFormMin" value="0">
 							<div class="row">
 								<div class="col-md-6 col-sm-6  form-group has-feedback">
-									<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="kriteriaMinus_fav0" required placeholder="Kriteria Pengurangan nilai ke-0">
+									<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="kriteriaMinus_fav0" required placeholder="Kriteria Pengurangan nilai">
 									<span class="fa fa-at form-control-feedback left"></span>
 								</div>
 								<div class="col-md-4 col-sm-4  form-group has-feedback">
-									<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaiMinus_fav0" required placeholder="Nilai Min.">
+									<input data-rule-required="true" type="number" class="form-control has-feedback-left"  name="nilaiMinus_fav0" required placeholder="Nilai Min.">
 									<span class="fa fa-minus form-control-feedback left"></span>
 								</div>	
 								
@@ -92,7 +92,7 @@
 					<span class="fa fa-at form-control-feedback left"></span>
 				</div>	
 				<div class="col-md-4 col-sm-4  form-group has-feedback">
-					<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaimax_fav${counterFormKriteria}" required placeholder="Nilai Max.">
+					<input data-rule-required="true" type="number" class="form-control has-feedback-left"  name="nilaimax_fav${counterFormKriteria}" required placeholder="Nilai Max.">
 					<span class="fa fa-plus form-control-feedback left"></span>
 				</div>	
 				
@@ -131,7 +131,7 @@
 					<span class="fa fa-at form-control-feedback left"></span>
 				</div>
 				<div class="col-md-4 col-sm-4  form-group has-feedback">
-					<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaiMinus_fav${counterFormKriteriaMin}" required placeholder="Nilai Min.">
+					<input data-rule-required="true" type="number" class="form-control has-feedback-left"  name="nilaiMinus_fav${counterFormKriteriaMin}" required placeholder="Nilai Min.">
 					<span class="fa fa-minus form-control-feedback left"></span>
 				</div>	
 				
@@ -160,14 +160,16 @@
 			type : "POST",
 			data : $(this).serialize(),
 			dataType : 'json',
-			// beforeSend : function () {
-			// 	$('.simpan').attr('disabled', true);
-			// },
-			success : function(result) {
-				console.log(result);
+			beforeSend : function () {
+				$('.simpan').attr('disabled', true);
 			},
-			error : function(err) {
+			success : function(result) {
+				if (!result.error) {
 
+				}
+			},
+			error : (err) => {
+				console.log(err);
 			}
 		});
 	});

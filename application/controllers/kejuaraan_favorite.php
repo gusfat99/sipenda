@@ -17,23 +17,35 @@ class Kejuaraan_favorite extends CI_Controller {
 		$countFormKriteria = intval($this->input->post('currentIndexForm'));
 		$countFormKriteriaMin = intval($this->input->post('currentIndexFormMin'));
 
-		var_dump($countFormKriteria);
-		var_dump($countFormKriteriaMin); die;
+
 		$this->form_validation->set_rules('kejuaraan_fav', 'Kejuaraan Favorite', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('kriteria_fav', 'Kriteria Penilaian', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('nilaimax_fav', 'Nilai Maksimum', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('kriteriaMinus_fav', 'Kriteria Nilai Min', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('nilaiMinus_fav', 'Nilai Minus', 'trim|required|xss_clean');
+
+		for($i = 0; $i<=$countFormKriteria; $i++){
+			$this->form_validation->set_rules('kriteria_fav'.$i, 'Kriteria Penilaian', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('nilaimax_fav'.$i, 'Nilai Maksimum', 'trim|required|numeric|xss_clean');
+		}
+		
+		for($j=0; $j<=$countFormKriteriaMin; $j++) {
+			$this->form_validation->set_rules('kriteriaMinus_fav'.$j, 'Kriteria Nilai Min', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('nilaiMinus_fav'.$j, 'Nilai Minus', 'trim|required|numeric|xss_clean');
+		}
+		
+		
 
 		if ($this->form_validation->run() == FALSE) {
 			$return = [
 				"error" => true,
-				"kejuaraan_err" => form_error('kejuaraan_fav'),
-				"kriteria_err" => form_error('kriteria_fav'),
-				"nilaimax_err" => form_error("nilaimax_fav"),
-				"kriteriaMin_err" => form_error("kriteriaMinus_fav"),
-				"nilaiMinus_err" => form_error("nilaiMinus_fav")
+				"kejuaraan_fav" => form_error("kejuaraan_fav")
 			];
+			for($i = 0; $i<=$countFormKriteria; $i++) {
+				$return["kriteria_fav".$i] = form_error("kriteria_fav".$i);
+				$return["nilaimax_fav".$i] = form_error("nilaimax_fav".$i);
+				
+			}
+			for($j=0; $j<=$countFormKriteriaMin; $j++) {
+				$return["kriteriaMinus_fav".$j] = form_error("kriteriaMinus_fav".$j); 
+				$return["nilaiMinus_fav".$j] = form_error("nilaiMinus_fav".$j);
+			}
 		} else {
 			$return = [
 				"error" => false
