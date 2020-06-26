@@ -4,7 +4,7 @@
 			<div id="step-1">
 				
 				<div class="x_content">
-					<form id="form-lomba" method="post" class="form-label-left input_mask">
+					<form id="form-fav" method="post" class="form-label-left input_mask">
 						<div class="x_title">
 							<h2>Input Nama Kejuaraan Favorite</h2>
 							<div class="clearfix"></div>
@@ -26,12 +26,13 @@
 						</div>
 						<div class="clone-form">
 							<div class="row current-form-kriteria">
+								<input type="hidden" value="0" name="currentIndexForm"/>
 								<div class="col-md-6 col-sm-6  form-group has-feedback">
-									<input data-rule-required="true" type="text" class="form-control has-feedback-left" name="kriteria_fav-0[]" required placeholder="Kriteria Penilaian">
+									<input data-rule-required="true" type="text" class="form-control has-feedback-left" name="kriteria_fav0" required placeholder="Kriteria Penilaian">
 									<span class="fa fa-at form-control-feedback left"></span>
 								</div>	
 								<div class="col-md-4 col-sm-4  form-group has-feedback">
-									<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaimax_fav-0[]" required placeholder="Nilai Max.">
+									<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaimax_fav0" required placeholder="Nilai Max.">
 									<span class="fa fa-plus form-control-feedback left"></span>
 								</div>	
 								
@@ -46,13 +47,14 @@
 							<div class="clearfix"></div>
 						</div>
 						<div class="contain-form-kriteria_min">
+							<input type="hidden" name="currentIndexFormMin" value="0">
 							<div class="row">
 								<div class="col-md-6 col-sm-6  form-group has-feedback">
-									<input data-rule-required="true" type="text" class="form-control has-feedback-left" id="kriteriaMinus_fav1" name="kriteriaMinus_fav" required placeholder="Kriteria Pengurangan nilai ke-1">
+									<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="kriteriaMinus_fav0" required placeholder="Kriteria Pengurangan nilai ke-0">
 									<span class="fa fa-at form-control-feedback left"></span>
 								</div>
 								<div class="col-md-4 col-sm-4  form-group has-feedback">
-									<input data-rule-required="true" type="text" class="form-control has-feedback-left" id="nilaiMinus_fav1" name="nilaiMinus_fav1" required placeholder="Nilai Min.">
+									<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaiMinus_fav0" required placeholder="Nilai Min.">
 									<span class="fa fa-minus form-control-feedback left"></span>
 								</div>	
 								
@@ -86,11 +88,11 @@
 		const cloneForm = `
 			<div class="row current-form-kriteria-${counterFormKriteria}">
 				<div class="col-md-6 col-sm-6  form-group has-feedback">
-					<input data-rule-required="true" type="text" class="form-control has-feedback-left" name="kriteria_fav-0[]" required placeholder="Kriteria Penilaian ke-${counterFormKriteria+1}">
+					<input data-rule-required="true" type="text" class="form-control has-feedback-left" name="kriteria_fav${counterFormKriteria}" required placeholder="Kriteria Penilaian ke-${counterFormKriteria+1}">
 					<span class="fa fa-at form-control-feedback left"></span>
 				</div>	
 				<div class="col-md-4 col-sm-4  form-group has-feedback">
-					<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaimax_fav-0[]" required placeholder="Nilai Max.">
+					<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaimax_fav${counterFormKriteria}" required placeholder="Nilai Max.">
 					<span class="fa fa-plus form-control-feedback left"></span>
 				</div>	
 				
@@ -102,14 +104,19 @@
 		$(".clone-form").append(cloneForm);
 
 		// const filter = $(".current-form-kriteria-"+counterFormKriteria).filter(`input[name=kriteria_fav-${counterFormKriteria - 1}]`);
-		// console.log(filter);		
+		// console.log(filter);	
+		$("input[name=currentIndexForm]").val(counterFormKriteria);	
 		
 		counterFormKriteria++;
 	});
 
 	$(".clone-form").on('click', '.btn-remove-kriteria', function(e) {
 		e.preventDefault();
+		counterFormKriteria -= 1;
+		
 		$(this).parent().remove();
+		$("input[name=currentIndexForm]").val(counterFormKriteria-1);	
+
 	})
 
 	let counterFormKriteriaMin = 1;
@@ -120,11 +127,11 @@
 		const formKriteriaMin = `
 			<div class="row">
 				<div class="col-md-6 col-sm-6  form-group has-feedback">
-					<input data-rule-required="true" type="text" class="form-control has-feedback-left" name="kriteriaMinus_fav[]" required placeholder="Kriteria Pengurangan nilai ke-${counterFormKriteriaMin+1}">
+					<input data-rule-required="true" type="text" class="form-control has-feedback-left" name="kriteriaMinus_fav${counterFormKriteriaMin}" required placeholder="Kriteria Pengurangan nilai ke-${counterFormKriteriaMin+1}">
 					<span class="fa fa-at form-control-feedback left"></span>
 				</div>
 				<div class="col-md-4 col-sm-4  form-group has-feedback">
-					<input data-rule-required="true" type="text" class="form-control has-feedback-left" id="nilaiMinus_fav1" name="nilaiMinus_fav[]" required placeholder="Nilai Min.">
+					<input data-rule-required="true" type="text" class="form-control has-feedback-left"  name="nilaiMinus_fav${counterFormKriteriaMin}" required placeholder="Nilai Min.">
 					<span class="fa fa-minus form-control-feedback left"></span>
 				</div>	
 				
@@ -134,15 +141,37 @@
 		`;
 
 		$(".contain-form-kriteria_min").append(formKriteriaMin);
+		$("input[name=currentIndexFormMin]").val(counterFormKriteriaMin)
 		counterFormKriteriaMin++;
 
 	});
 
 	$(".contain-form-kriteria_min").on('click', '.btn-remove-kriteri-min', function(e) {
 		e.preventDefault();
+		counterFormKriteriaMin--;
+		$("input[name=currentIndexFormMin]").val(counterFormKriteriaMin-1)
 		$(this).parent().remove();
 	});
 	
+	$("form#form-fav").on('submit', function(e) {
+		e.preventDefault();
+		$.ajax({
+			url : `<?= base_url() ?>kejuaraan_favorite/add`,
+			type : "POST",
+			data : $(this).serialize(),
+			dataType : 'json',
+			// beforeSend : function () {
+			// 	$('.simpan').attr('disabled', true);
+			// },
+			success : function(result) {
+				console.log(result);
+			},
+			error : function(err) {
+
+			}
+		});
+	});
+
 	$(document).ready(function(argument) {
 
 		
@@ -208,38 +237,29 @@
 		}
 
 
-		$("#form-lomba").validate({
-			errorElement : "span",
-			submitHandler : onSubmitFormLomba,
-			rules : {
-				namaLomba : {
-					required : true,
-					minlength : 2,
-				},
-				golongan : "required"
-			},
-			messages : {
-				namaLomba : {
-					required : "Nama Mata Lomba tidak boleh kosong",
-					minlength : "Nama Mata Lomba terlalu pendek"
-				},
-				golongan : "Silahkan Pilih Golongan"
+		// $("#form-lomba").validate({
+		// 	errorElement : "span",
+		// 	submitHandler : onSubmitFormLomba,
+		// 	rules : {
+		// 		namaLomba : {
+		// 			required : true,
+		// 			minlength : 2,
+		// 		},
+		// 		golongan : "required"
+		// 	},
+		// 	messages : {
+		// 		namaLomba : {
+		// 			required : "Nama Mata Lomba tidak boleh kosong",
+		// 			minlength : "Nama Mata Lomba terlalu pendek"
+		// 		},
+		// 		golongan : "Silahkan Pilih Golongan"
 
-			},
+		// 	},
 
-		});
+		// });
 
 
-		let counter = 1;
-
-		$("#btn-add-kriteria").click(function(e) {
-			e.preventDefault();
-			counter += 1;
-			let cloneKriteria = $(".kriteria-penilaian").clone();
-			cloneKriteria.attr("class", `form-group row has-feedback kriteria-penilaian-${counter}`);
-			cloneKriteria.appendTo("#append-kriteria");
-		});
-
+		
 
 
 	});
