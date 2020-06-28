@@ -153,19 +153,28 @@
 		$(this).parent().remove();
 	});
 	
-	$("form#form-fav").on('submit', function(e) {
+	$("form#form-fav").on('submit',  function(e) {
 		e.preventDefault();
 		$.ajax({
 			url : `<?= base_url() ?>kejuaraan_favorite/add`,
 			type : "POST",
 			data : $(this).serialize(),
 			dataType : 'json',
-			beforeSend : function () {
-				$('.simpan').attr('disabled', true);
-			},
+			// beforeSend : function () {
+			// 	$('.simpan').attr('disabled', true);
+			// },
 			success : function(result) {
 				if (!result.error) {
-
+					swal({
+						title: "Success",
+						text: result.message,
+						icon: "success",
+					}).then(response => {
+						if (response) {
+							window.location.reload();
+						}
+					})
+					
 				}
 			},
 			error : (err) => {
