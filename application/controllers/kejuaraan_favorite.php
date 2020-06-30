@@ -12,7 +12,7 @@ class Kejuaraan_favorite extends CI_Controller {
 
 	public function input() {
 		$data["title"] = "Input Kejuaraan Favorite";
-		$this->template->render_page("favorite/add_fav_v", $data);
+		$this->template->render_page("favorite/add_fav_v", $data, true);
 	}
 
 	public function add() {

@@ -7,7 +7,7 @@ class Template {
 		$this->_ci = &get_instance();
 	}
 
-	function render_page($content, $data = null) {
+	function render_page($content, $data = null, $isPage2 = false) {
 
 		$data["menu"] = $this->_ci->db->get("menu")->result();
 		$data["sesi"] = $this->_ci->db->get_where("sesi_lomba",["status_sesi" => 1])->row();
@@ -19,9 +19,15 @@ class Template {
 		$data["title"] = $data["title"];
 		$this->_ci->db->join("mata_lomba",  "mata_lomba.id_mata_lomba = juri.id_r_mata_lomba");
 		$data["juri"] = $this->_ci->db->get('juri')->result();
-		echo  $this->_ci->load->view("templates/index", $data, true);
+		if ($isPage2) {
+			echo $this->_ci->load->view("templates/index2", $data, true);
+		} else {
+			echo  $this->_ci->load->view("templates/index", $data, true);
+		}
+		
 		
 	}
+
 
 	public function render_page_err($type, $msg="") {
 		$data["type"] = $type;
