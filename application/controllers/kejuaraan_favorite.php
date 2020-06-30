@@ -34,11 +34,10 @@ class Kejuaraan_favorite extends CI_Controller {
 
 		for($i = 0; $i<=$countFormKriteria; $i++){
 			$dataKriteria[$i] = [
-				"id_r_mata_lomba" => $kode,
-				"kriteria" => $this->input->post('kriteria_fav'.$i, true),
+				"kriteria_penilaian_fav" => $this->input->post('kriteria_fav'.$i, true),
+				"id_r_juara_lomba" => $kode,
 				"nilai_max" => $this->input->post('nilaimax_fav'.$i, true),
-				"is_minus" => 0,
-				"is_favorite" => 1
+				"is_minus" => 0
 			];
 			$this->form_validation->set_rules('kriteria_fav'.$i, 'Kriteria Penilaian', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('nilaimax_fav'.$i, 'Nilai Maksimum', 'trim|required|numeric|xss_clean');
@@ -46,11 +45,10 @@ class Kejuaraan_favorite extends CI_Controller {
 		
 		for($j=0; $j<=$countFormKriteriaMin; $j++) {
 			$dataKriteria[$i] = [
-				"id_r_mata_lomba" => $kode,
-				"kriteria" => $this->input->post('kriteriaMinus_fav'.$j, true),
+				"kriteria_penilaian_fav" => $this->input->post('kriteria_fav'.$j, true),
+				"id_r_juara_lomba" => $kode,
 				"nilai_max" => -intval($this->input->post('nilaiMinus_fav'.$j, true)),
-				"is_minus" => 1,
-				"is_favorite" => 1
+				"is_minus" => 1
 			];
 			$this->form_validation->set_rules('kriteriaMinus_fav'.$j, 'Kriteria Nilai Min', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('nilaiMinus_fav'.$j, 'Nilai Minus', 'trim|required|numeric|xss_clean');
@@ -88,8 +86,9 @@ class Kejuaraan_favorite extends CI_Controller {
 					"icon" => "",
 					"sort_index" => 6,
 					"is_active" =>  1,
-					"is_mata_lomba" => 1,
-					"id_r_mata_lomba" => $kode,
+					"is_mata_lomba" => 0,
+					"id_r_mata_lomba" => 0,
+					"id_r_juara_favorite" => $kode,
 					"id_sesi_lomba" => $idSesi
 				];
 				$this->menu->insert_menu($menu);

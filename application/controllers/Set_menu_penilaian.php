@@ -31,6 +31,7 @@ class Set_menu_penilaian extends CI_Controller {
 			"is_active" => 1,
 			"is_mata_lomba" => 1,
 			"id_r_mata_lomba" => $this->input->post('id'),
+			"id_r_juara_lomba" => 0,
 			"id_sesi_lomba" => get_sesi_lomba()->id_sesi
 		];
 		$result = $this->menu->insert_menu($data);

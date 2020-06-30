@@ -32,6 +32,10 @@
                           $dataAttr = 'data-lomba = '.$mLvl2->id_r_mata_lomba.' class="mata-lomba-link"';
                         }
 
+                        if ($mLvl2->id_r_juara_favorite) {
+                          $dataAttr = 'data-lomba = '.$mLvl2->id_r_juara_favorite.' class="favorite-link"';
+                        }
+
 
 
                         $menu_context_url=str_replace('http://','',base_url().$mLvl2->link);
@@ -133,4 +137,12 @@
             }
             document.location.href= '<?= base_url('penilaian') ?>/list/'+mataLombaId+'?jenis='+jenis+selector;
           });
+
+          $(".favorite-link").click(async function(e) {
+            e.preventDefault();
+            const favoriteId = $(this).data("lomba");
+
+            document.location.href=`<?= base_url('kejuaraan_favorite') ?>/list/${favoriteId}`;
+          });
+
         </script>

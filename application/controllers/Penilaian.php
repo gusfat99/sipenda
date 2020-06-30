@@ -15,6 +15,7 @@ class Penilaian extends CI_Controller {
 	public function list($mataLombaId) {
 		
 		$data["mata_lomba"] = $this->lomba->get_mata_lomba($mataLombaId);
+       
         $data['title'] = "Penilaian ".$data["mata_lomba"]->mata_lomba;
 		$tingkatan = $data["mata_lomba"]->tingkatan;
 		$data["tingkatan"] = $tingkatan;
