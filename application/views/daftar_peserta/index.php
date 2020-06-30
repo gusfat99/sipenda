@@ -5,30 +5,24 @@
       <div class="card-body">
         <form action="" method="POST" id="filter-peserta">
           <div class="form-group row">
-            <div class="col-sm-5 mt-2">
-             <select name="filterGolongan" class="custom-select">
-              <option value="null">Golongan</option>
-              <option value="SMA">Penegak</option>
-              <option value="SMP">Penggalang</option>
-              <option value="SD">Penggalang (SD)</option>
-            </select>
+            <div class="col-sm-6 col-md-6 mt-2">
+              <select name="filterGolongan" class="custom-select">
+                <option value="null">Golongan</option>
+                <option value="SMA">Penegak</option>
+                <option value="SMP">Penggalang</option>
+                <option value="SD">Penggalang (SD)</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 mt-2">
+              <button class="btn-sm btn btn-primary"> <i class="fa fa-filter"></i> Filter</button>
+              <button class="btn-sm btn btn-secondary"><i class="glyphicon glyphicon-repeat"></i></button>
+            </div>
           </div>
-          <div class="col-sm-5 mt-2">
-           <select name="filterJenis" class="custom-select">
-            <option value="null">Jenis</option>
-            <option value="L">Putra</option>
-            <option value="P">Putri</option>
-          </select>
-        </div>
-        <div class="col-sm-2 mt-2">
-          <button class="btn-sm btn btn-primary"> <i class="fa fa-filter"></i> Filter</button>
-          <button class="btn-sm btn btn-secondary"><i class="glyphicon glyphicon-repeat"></i></button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
+
   </div>
-  
-</div>
 </div>
 <table class="datatable table table-striped table-bordered dt-responsive" cellspacing="0" width="100%">
  <thead>
@@ -36,7 +30,7 @@
     <th>No.</th>
     <th>Nama Sekolah</th>
     <th>No Urut</th>
-    <th>Tingkat</th>
+    <th>Golongan</th>
     <th>Jenis</th>
     <th>Tanggal Registrasi</th>
     <th>Aksi</th>
@@ -55,7 +49,14 @@
   } else {
     $tingkatan = "Penggalang (SD)";
   }
-  $p->jenis == "L" ? $jenis = "Putra" : $jenis = "Putri";
+  
+  if($p->jenis == "LP") {
+    $jenis ="Putra & Putri";
+  } elseif($p->jenis == "L") {
+    $jenis = "Putra";
+  } else {
+    $jenis = "Putri";
+  }
 
   ?>
   <tr>
@@ -67,8 +68,8 @@
     <td><?= $p->tgl_regist ?></td>
     <td>
       <div class="btn-actions">
-        <a href="" onclick="modalEdit(<?= $p->id_daftar_peserta; ?>)" class="btn-sm btn btn-success btn-edit-peserta"  data-toggle="modal" data-id="<?= $p->id_daftar_peserta; ?>"><i class="fa fa-edit"></i></a>
-        <a href="#" onclick="sweatAlert(<?= $p->id_daftar_peserta; ?>)" class="btn-sm btn btn-danger" data-id="<?= $p->id_daftar_peserta; ?>"><i class="fa fa-trash"></i></a>
+        <a href="" onclick="modalEdit('<?= $p->id_daftar_peserta; ?>')" class="btn-sm btn btn-success btn-edit-peserta"  data-toggle="modal" id="<?= $p->id_daftar_peserta; ?>"><i class="fa fa-edit"></i></a>
+        <a href="#" onclick="sweatAlert('<?= $p->id_daftar_peserta; ?>')" class="btn-sm btn btn-danger" id="<?= $p->id_daftar_peserta; ?>"><i class="fa fa-trash"></i></a>
       </div>
     </td>
   </tr>
@@ -105,11 +106,11 @@ endforeach;
             </div>
           </div>
           <div class="form-group row">
-            <label for="tingkat" class="col-sm-2 col-form-label">Tingkat</label>
+            <label for="tingkat" class="col-sm-2 col-form-label">Golongan</label>
             <div class="col-sm-10">
               <select required name="tingkatan" class="form-control form-control-sm">
                 <option value="" >== Pilih Golongan ==</option>
-                <option value="SMA">Pengegak</option>
+                <option value="SMA">Penegak</option>
                 <option value="SMP">Penggalang</option>
                 <option value="SD">Penggalang (SD)</option>
               </select>
@@ -123,14 +124,19 @@ endforeach;
            
          </div>
          <div class="form-group ml-2 row genre">
-           <div class="custom-control custom-radio custom-control-inline">
-            <input id="jk_l" class="custom-control-input" type="radio" name="jenis_kelamin" checked value="L">
-            <label for="jk_l" class="custom-control-label" for="jenis_kelamin">Putra</label>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input id="jk_lp" class="custom-control-input" type="radio" name="jenis" checked value="LP">
+            <label for="jk_lp" class="custom-control-label">Putra & Putri</label>
             
           </div>
           <div class="custom-control custom-radio custom-control-inline">
-            <input id="jk_p" class="custom-control-input" type="radio" name="jenis_kelamin" value="P">
-            <label for="jk_p" class="custom-control-label" for="jenis_kelamin">Putri</label>
+            <input id="jk_l" class="custom-control-input" type="radio" name="jenis" value="L">
+            <label for="jk_l" class="custom-control-label">Putra</label>
+            
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input id="jk_p" class="custom-control-input" type="radio" name="jenis" value="P">
+            <label for="jk_p" class="custom-control-label">Putri</label>
           </div>
         </div>
         
@@ -174,13 +180,26 @@ endforeach;
             <label for="tingkat" class="col-sm-2 col-form-label">Tingkat</label>
             <div class="col-sm-10">
               <select name="tingkatan" class="form-control form-control-sm">
-               
+
               </select>
             </div>
           </div>
-          <div class="form-group ml-2 row genre">
-           
-          </div>
+          <div class="form-group ml-2 row tiers">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input id="jk_lp" class="custom-control-input" type="radio" name="jenis" value="LP">
+              <label for="jk_lp" class="custom-control-label">Putra & Putri</label>
+              
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input id="jk_l" class="custom-control-input" type="radio" name="jenis" value="L">
+              <label for="jk_l" class="custom-control-label">Putra</label>
+              
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input id="jk_p" class="custom-control-input" type="radio" name="jenis" value="P">
+              <label for="jk_p" class="custom-control-label">Putri</label>
+            </div>
+           </div>
           
         </div>
         <div class="modal-footer">
@@ -195,24 +214,24 @@ endforeach;
 </script>
 <script type="text/javascript">
   $(document).ready(() => {
-     $(".dt-buttons").removeClass("btn-group");
-     $(".add-peserta").click(function(){
-        $("#addModalPeserta").modal("show");
-     });
-    
+   $(".dt-buttons").removeClass("btn-group");
+   $(".add-peserta").click(function(){
+    $("#addModalPeserta").modal("show");
   });
-   const sesiLevel = `<?= $this->session->userdata('level'); ?>`;
-   let btnOptions = [];
-    sesiLevel !== "admin" ? $(".btn-actions").empty() : "";
-    if (sesiLevel === "admin") {
-      btnOptions.push(
-        {
-          text : "<span class='fa fa-plus-square'> Tambah</span>",
-          className : "btn btn-sm btn-primary add-peserta"
-        }
-      );
+
+ });
+  const sesiLevel = `<?= $this->session->userdata('level'); ?>`;
+  let btnOptions = [];
+  sesiLevel !== "admin" ? $(".btn-actions").empty() : "";
+  if (sesiLevel === "admin") {
+    btnOptions.push(
+    {
+      text : "<span class='fa fa-plus-square'> Tambah</span>",
+      className : "btn btn-sm btn-primary add-peserta"
     }
- 
+    );
+  }
+
 
   const dt = $(".datatable").DataTable({
     dom : '<"row mt-2"<"col-sm-6 col-md-6 float-left"f><"col-sm-6 col-md-6 float-right"B>>rtip',
@@ -223,7 +242,7 @@ endforeach;
   $("form#add-peserta").submit(function(e) {
     e.preventDefault();
     const dataPeserta = $(this).serialize();
-    console.log(dataPeserta);
+    
     $.ajax({
       url : `<?= base_url('peserta/add') ?>`,
       type : "POST",
@@ -242,7 +261,7 @@ endforeach;
     $("#editPesertaModal").modal("show");
     let tingkatan = ["SD","SMP","SMA"];
     let optionTingkatan = '<option>Pilih Tingkatan</option>';
-    let genre = ["L","P"];
+    let kindOfTiers = ["LP","L","P"];
     let optionSex = '';
 
     $.getJSON(`<?= base_url(); ?>/peserta/get_peserta_by_id/${idPeserta}`,(result)=>{
@@ -269,39 +288,9 @@ endforeach;
         }
       }
 
-      for(const sex of genre) {
-        
-        if (sex === result.jenis) {
-          optionSex = `
-          <div class="custom-control custom-radio custom-control-inline">
-          <input id="jk_l" class="custom-control-input" type="radio" name="jenis_kelamin" checked value="L">
-          <label for="jk_l" class="custom-control-label" for="jenis_kelamin">Putra</label>
-          
-          </div>
-          <div class="custom-control custom-radio custom-control-inline">
-          <input id="jk_p" class="custom-control-input" type="radio" name="jenis_kelamin" value="P">
-          <label for="jk_p" class="custom-control-label" for="jenis_kelamin">Putri</label>
-          </div>
-          `;
-          break;
-        } else {
-         optionSex = `
-         <div class="custom-control custom-radio custom-control-inline">
-         <input id="jk_l" class="custom-control-input" type="radio" name="jenis_kelamin" value="L">
-         <label for="jk_l" class="custom-control-label" for="jenis_kelamin">Putra</label>
-         
-         </div>
-         <div class="custom-control custom-radio custom-control-inline">
-         <input id="jk_p" class="custom-control-input" type="radio" name="jenis_kelamin" checked value="P">
-         <label for="jk_p" class="custom-control-label" for="jenis_kelamin">Putri</label>
-         </div>
-         `;
-         break;
-       }
+      $(`input[value=${result.jenis}]`).attr("checked", true);
 
-     }
-     $("div.genre").html(optionSex);
-     $("select[name='tingkatan']").html(optionTingkatan);
+      $("select[name='tingkatan']").html(optionTingkatan);
 
    });
   }

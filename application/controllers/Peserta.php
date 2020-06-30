@@ -40,7 +40,6 @@ class Peserta extends CI_Controller {
 		$post = [
 			$this->input->post("no_urut",true),
 			$this->input->post("sekolah",true),
-			$this->input->post('jenis_kelamin',true),
 			$this->input->post('tingkatan',true),
 			$this->input->post('date_regist',true),
 			

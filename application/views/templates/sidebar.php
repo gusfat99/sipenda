@@ -142,7 +142,7 @@
             e.preventDefault();
             const favoriteId = $(this).data("lomba");
 
-            document.location.href=`<?= base_url('kejuaraan_favorite') ?>/list/${favoriteId}`;
+            document.location.href=`<?= base_url('kejuaraan_favorite') ?>/list/${favoriteId}?golongan=sma`;
           });
 
         </script>

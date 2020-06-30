@@ -13,6 +13,14 @@ class M_Favorite extends CI_Model {
 			return $this->db->insert_batch($this->table_r, $dataKriteria);;
 		}
 	}
+
+	public function get_kejuaraan_favorite($juaraFavoriteId = null) {
+		if ($juaraFavoriteId) {
+			return $this->db->get($this->table)->row();
+		} else {
+			return $this->db->get($this->table)->result();
+		}
+	}
 }
 
 /* End of file M_Favorite.php */

@@ -44,17 +44,17 @@
           if ($row->golongan_kelamin != 'semua_jenis') {
             echo $row->nama." (".$row->golongan_kelamin.") <br>";
           } else {
-             echo $row->nama."<br>";
-          }
-          continue;
-        } ?>
-      <?php endforeach; ?>
-    </td>
-    <td align="center">
-      <a href="#" class="btn btn-sm <?= $button ?> btn-actions" data-id="<?= $l->id_mata_lomba; ?>" data-toggle="tooltip" data-placement="top" data-title="<?= $l->mata_lomba; ?>" action="<?= $action; ?>" title="<?= $title; ?>"><span class="<?= $icon; ?>"> <?= $status; ?></span></a>
-    </td>
-  </tr>
-  <?php $i++; endforeach; ?>
+           echo $row->nama."<br>";
+         }
+         continue;
+       } ?>
+     <?php endforeach; ?>
+   </td>
+   <td align="center">
+    <a href="#" class="btn btn-sm <?= $button ?> btn-actions" data-id="<?= $l->id_mata_lomba; ?>" data-toggle="tooltip" data-placement="top" data-title="<?= $l->mata_lomba; ?>" action="<?= $action; ?>" title="<?= $title; ?>"><span class="<?= $icon; ?>"> <?= $status; ?></span></a>
+  </td>
+</tr>
+<?php $i++; endforeach; ?>
 </tbody>
 </table>
 
@@ -89,31 +89,31 @@
                </div>
              </div>
            </div>
-          </fieldset>
-          <div class="form-group changeJuri1">
-            <select class="form-control" name="juri1">
-              <option>Pilih Juri</option>
-              <?php foreach($juri as $row): ?>
-                <option value="<?= $row->id_user; ?>" ><?= $row->nama; ?></option>
-              <?php endforeach; ?>
-            </select>
-          </div>
-          <div class="form-group changeJuri2">
-            <select class="form-control" name="juri2">
-              <option>Pilih Juri Putri</option>
-              <?php foreach($juri as $row): ?>
-                <option value="<?= $row->id_user; ?>" ><?= $row->nama; ?></option>
-              <?php endforeach; ?>
-            </select>
-          </div>
+         </fieldset>
+         <div class="form-group changeJuri1">
+          <select class="form-control" name="juri1">
+            <option>Pilih Juri</option>
+            <?php foreach($juri as $row): ?>
+              <option value="<?= $row->id_user; ?>" ><?= $row->nama; ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
-        <div class="modal-footer">
-          <a class="btn btn-secondary" href="<?= base_url('set_menu_penilaian') ?>">Batal</a>
-          <button type="submit" class="btn btn-primary save">Simpan</button>
+        <div class="form-group changeJuri2">
+          <select class="form-control" name="juri2">
+            <option>Pilih Juri Putri</option>
+            <?php foreach($juri as $row): ?>
+              <option value="<?= $row->id_user; ?>" ><?= $row->nama; ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
       </div>
-    </form> 
-  </div>
+      <div class="modal-footer">
+        <a class="btn btn-secondary" href="<?= base_url('set_menu_penilaian') ?>">Batal</a>
+        <button type="submit" class="btn btn-primary save">Simpan</button>
+      </div>
+    </div>
+  </form> 
+</div>
 </div>
 
 
@@ -134,10 +134,10 @@
         id_juri = fetchDataJuri.result[0].id_juri;
       }
       const update = await $.ajax({
-          url : `<?= base_url() ?>${controller}/updateSetMenu/${id_juri}`,
-          data : formSetMenu.serialize(),
-          dataType : 'JSON',
-          type : 'POST',
+        url : `<?= base_url() ?>${controller}/updateSetMenu/${id_juri}`,
+        data : formSetMenu.serialize(),
+        dataType : 'JSON',
+        type : 'POST',
       });
       if (update) {
         return document.location.href=`<?= base_url(); ?>${controller}`;  
@@ -179,7 +179,7 @@
 
   $(".set-menu").click(async (e) =>{
     e.preventDefault();
-     $(".save").attr("is_update",false);
+    $(".save").attr("is_update",false);
     const lombaId = $("tr.selected").data("id"); 
     const isEdit = $("tr.selected td:eq(4)").text().trim();
 
@@ -224,7 +224,7 @@
     } else {
       $("#setMenuModal").modal("show");
     }
-   
+    
   });
 
   $(".btn-actions").click(async function(e) {
@@ -260,16 +260,16 @@
      $(this).attr("action", "aktif");
    }
 
-    if(setAct) {
-      document.location.href= "<?= base_url() ?>"+controller;
-    }  
-  });
+   if(setAct) {
+    document.location.href= "<?= base_url() ?>"+controller;
+  }  
+});
 
 
   $(".changeJuri2").hide();
   $(".changeJuri1").hide();
 
-$(":radio").on('change',function(){
+  $(":radio").on('change',function(){
    if(parseInt($(this).val())){
      $("select[name=juri1] option:eq(0)").text("Pilih Juri");
      $(".changeJuri1").show(); 
@@ -282,13 +282,13 @@ $(":radio").on('change',function(){
 });
 
 
-formSetMenu.validate({
-  errorElement : "span",
-  rules : {
-    untuk2Golongan : {
-      required : true
-    }
-  },
-  submitHandler : onSubmitHandler
-});
+  formSetMenu.validate({
+    errorElement : "span",
+    rules : {
+      untuk2Golongan : {
+        required : true
+      }
+    },
+    submitHandler : onSubmitHandler
+  });
 </script>

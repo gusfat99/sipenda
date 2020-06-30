@@ -104,6 +104,13 @@ class Kejuaraan_favorite extends CI_Controller {
 		echo json_encode($return);
 	}
 
+	public function list($juaraFavoriteId) {
+		$golongan = htmlspecialchars($this->input->get('golongan', true));
+		$title = $this->Fav->get_kejuaraan_favorite($juaraFavoriteId);
+       	$data["title"] = "Penilaian Kejuaraan Favorite ".$title->kejuaraan_favorite;
+		$this->template->render_page("favorite/list_kejuaraan_fav_v", $data);
+	}
+
 }
 
 /* End of file kejuaraan_favorite.php */

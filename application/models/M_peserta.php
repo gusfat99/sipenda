@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class M_peserta extends CI_Model {
 
 	private $table = "daftar_peserta";
+	private $_table_r = "peserta_lomba";
 	private $field_sesi = "id_r_sesi";
 	private $order_column = [""];
 
@@ -77,16 +78,19 @@ class M_peserta extends CI_Model {
 	 //    $this->db->or_like('nomor_peserta', $search); // Untuk menambahkan query where OR LIKE
 	     return $this->db->query($query)->num_rows(); // Eksekusi query sql sesuai kondisi diatas
 	}
-
-
-	public function get_all_peserta($golongan, $jenis) {
-
+	private function _query() {
 		$this->db->select("*");
 		$this->db->from("daftar_peserta")
 		->join("sesi_lomba","sesi_lomba.id_sesi = daftar_peserta.id_r_sesi");
 		$this->db->where("sesi_lomba.status_sesi",1);
 		$this->db->order_by("nomor_peserta","ASC");
+	}
 
+
+	public function get_all_peserta($golongan, $jenis) {
+
+		
+		$this->_query();
 
 		if (($golongan && $jenis ) && ($golongan != "null" && $jenis != "null")) {
 			$this->db->where("tingkatan", $golongan);
@@ -101,10 +105,7 @@ class M_peserta extends CI_Model {
 	}
 
 	public function get_peserta_by_id($id) {
-		$this->db->select("*");
-		$this->db->from("daftar_peserta")
-		->join("sesi_lomba","sesi_lomba.id_sesi = daftar_peserta.id_r_sesi");
-		$this->db->where("sesi_lomba.status_sesi",1);
+		$this->_query();
 		$this->db->where("id_daftar_peserta",$id);
 		return $this->db->get()->row();	
 	}
@@ -123,25 +124,65 @@ class M_peserta extends CI_Model {
 	}
 
 	public function delete_peserta($id) {
+		$this->db->delete($this->_table_r, ["id_r_daftar_peserta" => $id]);
 		return $this->db->delete($this->table,["id_daftar_peserta"=>$id]);
 	}
 
 	public function add_peserta($post) {
 		$sesi_lomba = $this->get_sesi_lomba();
+		$id = strtolower($sesi_lomba->id_sesi.random_string(5).$post[2].date('Y'));
+		
 		$data = [
+			"id_daftar_peserta" => $id,
 			'id_r_sesi' => $sesi_lomba->id_sesi,
 			"nomor_peserta" => $post[0],
 			"nama_pangkalan" => $post[1],
-			"jenis" => $post[2],
-			"tingkatan" => $post[3],
-			"tgl_regist" => $post[4]
+			"tingkatan" => $post[2],
+			"jenis" => $this->input->post('jenis'),
+			"tgl_regist" => $post[3]
 		];
-		$result = $this->db->insert("daftar_peserta",$data);
-		if ($result) {
-			$this->session->set_flashdata('notif', 'Daftar Peserta Berhasil diatambahkan');
-			return true;
+		$insertPeserta = $this->_insert_peserta($data["id_daftar_peserta"]);
+		if ($insertPeserta > 0) {
+			$result = $this->db->insert("daftar_peserta",$data);
+			if ($result) {
+				$this->session->set_flashdata('notif', 'Daftar Peserta Berhasil diatambahkan');
+				return true;
+			}
 		}
+		
+		
 		return false;
+	}
+
+	private function _insert_peserta($id) {
+		if ($this->input->post('jenis') == "LP") {
+			$data = [
+				[
+					"id_r_daftar_peserta" => $id,
+					"jenis_kelamin" => "L"
+				],
+				[
+					"id_r_daftar_peserta" => $id,
+					"jenis_kelamin" => "P"
+				],
+			];
+			
+		} elseif ($this->input->post('jenis') == "L") {
+			$data = [
+				[
+					"id_r_daftar_peserta" => $id,
+					"jenis_kelamin" => "L"
+				]
+			];
+		} else {
+			$data = [
+				[
+					"id_r_daftar_peserta" => $id,
+					"jenis_kelamin" => "P"
+				]
+			];
+		}
+		return $this->db->insert_batch($this->_table_r, $data);
 	}
 
 }
